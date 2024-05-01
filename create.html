@@ -131,6 +131,7 @@
   console.log(formData)
         // Open and send XHR request
         xhr.open('POST', 'https://ip-server-side.onrender.com/api/videos/upload');
+        xhr.setRequestHeader('mode', 'cors');
         xhr.send(formData);
       } catch (error) {
         // Handle errors
