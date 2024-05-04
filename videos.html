@@ -235,7 +235,7 @@
         </footer>
     <div class="copy">
         <div class="container">
-            <a href="https://www.smarteyeapps.com/">2015 &copy; All Rights Reserved | Designed and Developed by Smarteyeapps</a>
+            <a href="https://www.smarteyeapps.com/">2024 &copy; All Rights Reserved </a>
 
             <span>
                 <a href=""><i class="fab fa-github"></i></a>
@@ -263,64 +263,68 @@
     });
 </script>
 <script>
-    $(document).ready(function () {
-        // Fetch data for trending videos
-        $.ajax({
-            url: 'https://ip-server-side.onrender.com/api/videos/videos',
-            method: 'GET',
-            success: function (data) {
-                // Update trending videos content
-                $('.video-row').empty(); // Clear existing content 
-                
-                // Get the category from the URL
-                var urlParams = new URLSearchParams(window.location.search);
-                var category = urlParams.get('category');
+   $(document).ready(function () {
+    // Fetch data for all videos
+    $.ajax({
+        url: 'https://ip-server-side.onrender.com/api/videos/videos',
+        method: 'GET',
+        success: function (data) {
+            // Update videos content
+            $('.video-row').empty(); // Clear existing content 
+            
+            // Organize videos by categories
+            var videosByCategory = {};
+            data.forEach(function (video) {
+                if (!videosByCategory[video.category]) {
+                    videosByCategory[video.category] = [];
+                }
+                videosByCategory[video.category].push(video);
+            });
 
-                // Filter videos based on the category
-                var filteredVideos = data.filter(function (video) {
-                    return video.category === category;
-                });
+            // Loop through each category
+            Object.keys(videosByCategory).forEach(function (category) {
+                // Create HTML for category heading
+                var categoryHtml = `
+                    <div class="col-12">
+                        <h3>${category}</h3>
+                    </div>
+                `;
+                $('.video-row').append(categoryHtml);
 
-                // Check if there are videos in the specified category
-                if (filteredVideos.length > 0) {
-                    // Loop through each filtered video
-                    filteredVideos.forEach(function (video) {
-                        // Create HTML for each video card
-                        var cardHtml = `
-                            <div class="col-lg-3 col-md-4 col-sm-6">
-                                <div class="video-card">
-                                    <!-- Embed the video directly -->
-                                    <video controls>
-                                        <source src="${video.videoUrl}" type="video/mp4">
-                                        Your browser does not support the video tag.
-                                    </video>
-                                    <div class="row details no-margin">
-                                        <!-- Title of the video -->
-                                        <h6>${video.title}</h6>
-                                        <!-- Category of the video -->
-                                        <p><strong>Category:</strong> ${video.category}</p>
-                                        <!-- Reviews of the video -->
-                                        <p><strong>Reviews:</strong> ${video.reviews}</p>
-                                    </div>
+                // Loop through videos in the category
+                videosByCategory[category].forEach(function (video) {
+                    // Create HTML for each video card
+                    var cardHtml = `
+                        <div class="col-lg-3 col-md-4 col-sm-6">
+                            <div class="video-card">
+                                <!-- Embed the video directly -->
+                                <video controls>
+                                    <source src="${video.videoUrl}" type="video/mp4">
+                                    Your browser does not support the video tag.
+                                </video>
+                                <div class="row details no-margin">
+                                    <!-- Title of the video -->
+                                    <h6>${video.title}</h6>
+                                    <!-- Category of the video -->
+                                    <p><strong>Category:</strong> ${video.category}</p>
+                                    <!-- Reviews of the video -->
+                                    <p><strong>Reviews:</strong> ${video.reviews}</p>
                                 </div>
                             </div>
-                        `;
-                        // Append the card HTML to the video row
-                        $('.video-row').append(cardHtml);
-                    });
-                } else {
-                    // Display a message if there are no videos in the specified category
-                    $('.video-row').html('<p>No videos found in the specified category.</p>');
-                }
-            },
-            error: function (xhr, status, error) {
-                console.error('Error fetching data:', error);
-                // Optionally, display an error message to the user
-                $('.video-row').html('<p>Error fetching data. Please try again later.</p>');
-            }
-        });
+                        </div>
+                    `;
+                    // Append the card HTML to the video row
+                    $('.video-row').append(cardHtml);
+                });
+            });
+        },
+        error: function (xhr, status, error) {
+            console.error('Error fetching data:', error);
+            // Optionally, display an error message to the user
+            $('.video-row').html('<p>Error fetching data. Please try again later.</p>');
+        }
     });
+});
+
 </script>
-
-
 </html>

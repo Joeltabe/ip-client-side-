@@ -164,7 +164,7 @@ function fetchGenres() {
         });
   console.log(formData)
         // Open and send XHR request
-        xhr.open('POST', 'https://ip-server-side.onrender.com/api/videos/upload');
+        xhr.open('POST', 'http://localhost:5002/api/videos/upload');
         xhr.setRequestHeader('mode', 'cors');
         xhr.send(formData);
       } catch (error) {
