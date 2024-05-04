@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>ip23movies</title>
+
+    <link rel="shortcut icon" href="assets/images/fav.jpg">
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/fontawsom-all.min.css">
+    <link rel="stylesheet" href="assets/css/animate.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/style.css" />
+    <link rel="stylesheet" href="assets/css/forms.css">
+    <style>
+        .video-card {
+            position: relative;
+            overflow: hidden;
+            width: 265px;
+            height: 195px;/* Set the height */
+            margin-bottom: 20px; /* Add some bottom margin for spacing */
+        }
+
+        .video-card video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Ensure the video covers the entire container */
+            transition: transform 0.3s ease;
+        }
+
+        .video-card .details {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background */
+            padding: 10px;
+            box-sizing: border-box;
+            transition: opacity 0.3s ease;
+            opacity: 0; /* Initially hidden */
+        }
+
+        .video-card:hover .details {
+            opacity: 1; /* Show details on hover */
+        }
+
+        .video-card .details h6,
+        .video-card .details p {
+            margin: 0;
+            color: #fff; /* Text color */
+        }
+
+        .loader-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px; /* Adjust height as needed */
+        }
+
+        .loader {
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid #3498db;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+    </style>
+</head>
+
+<body>
+
+    <!--####################### Header Starts Here ###################-->
+    <header class="continer-fluid ">
+        <div class="header-top">
+            <div class="container">
+                <div class="row col-det">
+                    <div class="col-lg-6 d-none d-lg-block">
+                        <ul class="ulleft">
+                            <li><i class="far fa-envelope"></i> ip23movies@gmail.com <span>|</span></li>
+                            <li><i class="far fa-clock"></i> Service Time : 12:AM</li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-6 col-md-12">
+                        <ul class="ulright">
+                            <li><i class="fas fa-cloud-upload-alt"></i> Upload Video <span>|</span></li>
+                            <li><i class="fas fa-user"></i> Login</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="menu-jk" class="header-bottom">
+            <div class="container">
+                <div class="row nav-row">
+                    <div class="col-md-3 logo">
+                        <img src="assets/images/Add_a_heading-removebg-preview.png" alt="">
+                    </div>
+                    <div class="col-md-9 nav-col">
+                        <nav class="navbar navbar-expand-lg navbar-light">
+
+                            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                                <span class="navbar-toggler-icon"></span>
+                            </button>
+                            <div class="collapse navbar-collapse" id="navbarNav">
+                                <ul class="navbar-nav">
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="index.html">Home </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="about_us.html">About Us</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="genre.html">genre</a>
+                                    </li>
+                                    <li class="nav-item active">
+                                        <a class="nav-link" href="videos.html">Videos</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="blog.html">Blog</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="contact_us.html">Contact US</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!--  ************************* Page Title Starts Here ************************** -->
+    <div class="page-nav no-margin row">
+        <div class="container">
+            <div class="row">
+                <h2>Top Videos</h2>
+                <ul>
+                    <li> <a href="#"><i class="fas fa-home"></i> Home</a></li>
+                    <li><i class="fas fa-angle-double-right"></i> Videos</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+    <!--####################### Trending Starts Here ###################-->
+    <div class="treanding-video container-fluid">
+        <div class="container">
+            <div class="row video-title no-margin">
+                <!-- Trending videos title -->
+            </div>
+            <div class="video-row row" style="display: none;"> <!-- Initially hide the video row -->
+                <!-- Loop through each video -->
+                <div class="loader-wrapper">
+                    <div class="loader"></div>
+                </div>
+                <% videos.forEach(function(video) { %>
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <div class="video-card">
+                        <!-- Embed the video directly -->
+                        <video class="video-element" controls muted loop preload="metadata">
+                            <source src="${video.videoUrl}" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                        <div class="row details no-margin">
+                            <!-- Title of the video -->
+                            <h6>${video.title}</h6>
+                            <!-- genre of the video -->
+                            <p><strong>genre:</strong> ${video.genre}</p>
+                            <!-- Reviews of the video -->
+                            <p><strong>Reviews:</strong> ${video.reviews}</p>
+                        </div>
+                    </div>
+                </div>
+                <% }) %>
+            </div>
+        </div>
+    </div>
+
+    <!--####################### Quote Starts Here ###################-->
+    <div class="footer-ablove">
+        <div class="container">
+            <div class="row">
+                <p>Are you looking for a consultant for your Business
+                    <button class="btn btn-default">Get Quote</button>
+                </p>
+            </div>
+        </div>
+    </div>
+    <!--####################### Footer Starts Here ###################-->
+    <footer class="footer"> <div class="container"> <div class="row"> <div class="col-md-3 about col-sm-12"> <h2><i class="fas fa-info-circle"></i> About Us</h2> <p> This streaming app, developed by Tabe Joel, is a leading provider of information technology, consulting, and business process services in Cameroon. Our dedicated employees offer strategic insights, technological expertise, and industry experience. </p>
+        angelscript
+        
+                </div>
+                <div class="col-md-3 col-sm-12">
+                    <h2><i class="fas fa-link"></i> Useful Links</h2>
+                    <ul class="list-unstyled link-list">
+                        <li><a ui-sref="about" href="#/about">About us</a><i class="fa fa-angle-right"></i></li>
+                        <li><a ui-sref="portfolio" href="#/portfolio">Portfolio</a><i class="fa fa-angle-right"></i></li>
+                        <li><a ui-sref="products" href="#/products">Latest jobs</a><i class="fa fa-angle-right"></i></li>
+                        <li><a ui-sref="gallery" href="#/gallery">Gallery</a><i class="fa fa-angle-right"></i></li>
+                        <li><a ui-sref="contact" href="#/contact">Contact us</a><i class="fa fa-angle-right"></i></li>
+                    </ul>
+                </div>
+                <div class="col-md-3 col-sm-12">
+                    <h2><i class="fas fa-life-ring"></i> Get Support</h2>
+                    <ul class="list-unstyled link-list">
+                        <li><a ui-sref="about" href="#/about">About us</a><i class="fa fa-angle-right"></i></li>
+                        <li><a ui-sref="portfolio" href="#/portfolio">Portfolio</a><i class="fa fa-angle-right"></i></li>
+                        <li><a ui-sref="products" href="#/products">Latest jobs</a><i class="fa fa-angle-right"></i></li>
+                        <li><a ui-sref="gallery" href="#/gallery">Gallery</a><i class="fa fa-angle-right"></i></li>
+                        <li><a ui-sref="contact" href="#/contact">Contact us</a><i class="fa fa-angle-right"></i></li>
+                    </ul>
+                </div>
+                <div class="col-md-3 col-sm-12 map-img">
+                    <h2><i class="fas fa-map-marker-alt"></i> Contact Us</h2>
+                    <address class="md-margin-bottom-40">
+                        Buea, Cameroon <br> Phone: +237 650665871 <br> Email: <a href="mailto:info@gmai.com"
+                            class="">info@camstream.com</a><br> github:  <a href="https://github.com/Joeltabe/" class="">www.ip23.com</a>
+                    </address>
+        
+                </div>
+            </div>
+        </div>
+        
+        </footer>
+    <div class="copy">
+        <div class="container">
+            <a href="https://www.smarteyeapps.com/">2015 &copy; All Rights Reserved | Designed and Developed by Smarteyeapps</a>
+
+            <span>
+                <a href=""><i class="fab fa-github"></i></a>
+                <a href="https://www.linkedin.com/groups/10411920/"><i class="fab fa-linkedin-in"></i></a>
+                <a href="https://in.pinterest.com/prabnr/pins/"><i class="fab fa-pinterest-p"></i></a>
+                <a href="https://twitter.com/prabinraja89"><i class="fab fa-twitter"></i></a>
+                <a href="https://www.facebook.com/freewebtemplatesbysmarteye"><i class="fab fa-facebook-f"></i></a>
+            </span>
+        </div>
+
+    </div>
+</body>
+<script src="assets/js/jquery-3.2.1.min.js"></script>
+<script src="assets/js/popper.min.js"></script>
+<script src="assets/js/bootstrap.min.js"></script>
+<script src="assets/plugins/scroll-fixed/jquery-scrolltofixed-min.js"></script>
+<script src="assets/js/script.js"></script>
+<script>
+    $(document).ready(function () {
+        $('.video-card video').hover(function () {
+            $(this).get(0).play();
+        }, function () {
+            $(this).get(0).pause();
+        });
+    });
+</script>
+<script>
+   $(document).ready(function () {
+    // Initially hide the video row and show the loader
+    $('.video-row').hide();
+    $('.loader-wrapper').show();
+
+    // Fetch data for trending videos
+    $.ajax({
+        url: 'https://ip-server-side.onrender.com/api/genre/',
+        method: 'GET',
+        success: function (data) {
+            // Update trending videos content
+            $('.video-row').empty(); // Clear existing content 
+            
+            // Get the genre from the URL
+            var urlParams = new URLSearchParams(window.location.search);
+            var genre = urlParams.get('genre');
+
+            // Filter videos based on the genre
+            var filteredVideos = data.filter(function (video) {
+                return video.genre === genre;
+            });
+
+            // Check if there are videos in the specified genre
+            if (filteredVideos.length > 0) {
+                // Loop through each filtered video
+                filteredVideos.forEach(function (video) {
+                    // Create HTML for each video card
+                    var cardHtml = `
+                        <div class="col-lg-3 col-md-4 col-sm-6">
+                            <div class="video-card">
+                                <!-- Embed the video directly -->
+                                <video controls>
+                                    <source src="${video.videoUrl}" type="video/mp4">
+                                    Your browser does not support the video tag.
+                                </video>
+                                <div class="row details no-margin">
+                                    <!-- Title of the video -->
+                                    <h6>${video.title}</h6>
+                                    <!-- Genre of the video -->
+                                    <p><strong>Genre:</strong> ${video.genre}</p>
+                                    <!-- Reviews of the video -->
+                                    <p><strong>Reviews:</strong> ${video.reviews}</p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    // Append the card HTML to the video row
+                    $('.video-row').append(cardHtml);
+                });
+                // Hide the loader and show the video row
+                $('.loader-wrapper').hide();
+                $('.video-row').show();
+            } else {
+                // Display a message if there are no videos in the specified genre
+                $('.video-row').html('<p>No videos found in the specified genre.</p>');
+                // Hide the loader
+                $('.loader-wrapper').hide();
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error('Error fetching data:', error);
+            // Optionally, display an error message to the user
+            $('.video-row').html('<p>Error fetching data. Please try again later.</p>');
+            // Hide the loader
+            $('.loader-wrapper').hide();
+        }
+    });
+});
+
+</script>
+
+
+</html>

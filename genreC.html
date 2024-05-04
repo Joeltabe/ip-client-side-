@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Genre</title>
+</head>
+
+<body>
+    <h2>Create Genre</h2>
+    <form id="createGenreForm" enctype="multipart/form-data">
+        <label for="name">Genre Name:</label><br>
+        <input type="text" id="name" name="name" required><br>
+        <label for="thumbnail">Thumbnail Image:</label><br>
+        <input type="file" id="thumbnail" name="thumbnail" accept="image/*" required><br><br>
+        <button type="submit">Submit</button>
+    </form>
+
+    <script>
+        document.getElementById('createGenreForm').addEventListener('submit', async function (event) {
+            event.preventDefault();
+
+            const form = event.target;
+            const formData = new FormData(form);
+            console.log(formData);
+
+            const genreData = {
+                name: formData.get('name'),
+                thumbnail: formData.get('thumbnail')
+            };
+
+            try {
+                const response = await fetch('http://localhost:5002/api/genre/create', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to create genre');
+                }
+
+                const responseData = await response.json();
+                console.log(responseData); // Handle success response
+            } catch (error) {
+                console.error('Error:', error.message); // Handle error
+            }
+        });
+    </script>
+</body>
+
+</html>

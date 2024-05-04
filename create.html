@@ -60,6 +60,13 @@
       <input type="text" id="category" name="category" required>
     </div>
     <div class="form-group">
+      <label for="genre">Genre:</label>
+      <select id="genre" name="genre" required>
+        <!-- Dropdown options will be dynamically inserted here -->
+      </select>
+    </div>
+    
+    <div class="form-group">
       <label for="description">Description:</label>
       <input type="text" id="description" name="description" required>
     </div>
@@ -89,7 +96,30 @@
   </form>
 </div>
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
+  // Fetch genres when the page is loaded
+fetchGenres();
+
+// Function to fetch genres
+function fetchGenres() {
+    $.ajax({
+        url: 'http://localhost:5002/api/genre/', // URL to fetch genres from
+        type: 'GET',
+        success: function (data) {
+            // Clear previous dropdown options
+            $('#genre').empty();
+            // Loop through fetched genres and append them to the dropdown
+            data.forEach(function (genre) {
+                $('#genre').append(`<option value="${genre.name}">${genre.name}</option>`);
+            });
+        },
+        error: function (xhr, status, error) {
+            console.error('Error fetching genres:', error);
+        }
+    });
+}
+
     // Function to handle form submission
     document.getElementById('video-form').addEventListener('submit', async function(event) {
       event.preventDefault();
