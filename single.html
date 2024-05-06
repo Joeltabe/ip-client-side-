@@ -11,6 +11,45 @@
     <link rel="stylesheet" href="assets/css/fontawsom-all.min.css">
     <link rel="stylesheet" href="assets/css/animate.css">
     <link rel="stylesheet" type="text/css" href="assets/css/style.css" />
+    <style>
+        body{
+
+            color: #fff;
+
+            background-color: #141414 !important;
+        }
+        .header-bottom{
+            background-color: wheat ;
+        }
+    .thumbnail-img {
+        width: 400px;
+        height: 274px;
+    }
+    .video-card {
+        border-radius: 10px;
+        overflow: hidden;
+        margin-right: 20px;
+        flex: 0 0 auto;
+        width: 200px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+    }
+    .details{
+        padding: 12px;
+        display: block;
+        color: wheat;
+    }
+    img{
+        border-radius: 10px;
+    }
+    .genre-link{
+        border-radius: 10px;
+    }
+    .genre-link img{
+        border-radius: 0;
+    }
+   
+                                
+    </style>
 </head>
 
 <body>
@@ -96,9 +135,10 @@
                 <div class="row">
                     <div class="col-md-8">
                         <div class="row no-margin video-cover">
-                            <iframe  height="415" src="https://www.youtube.com/embed/bveuj63Su4E" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                            <p>In this video, you will learn how to create a stylish appointment form from scratch using HTML, CSS, and Bootstrap Download the Project HTML, CSS, and Bootstrap Download the Project File from https://www.smarteyeapps.com/free-hos...
-                            </p>
+                            <video id="customPlayer" controls autoplay>
+                                <source src="" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
 
                             <div class="row no-margin video-title" bis_skin_checked="1">
                                 <h6><i class="fas fa-book"></i> 3 Comments</h6>
@@ -170,6 +210,9 @@
                                   
                     </div>
                     <div class="col-md-4">
+                        <div class="related-videos">
+                            <!-- Related videos will be dynamically populated here -->
+                        </div>
                         <div class="row no-margin video-title">
                             <h6><i class="fas fa-book"></i> Related Videos</h6>
                         </div>
@@ -357,5 +400,51 @@
 <script src="assets/plugins/scroll-fixed/jquery-scrolltofixed-min.js"></script>
 <script src="assets/js/script.js"></script>
 
+<script>
+<!-- Inside your <script> tag -->
+$(document).ready(function() {
+    // Read the video ID from the URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const videoId = urlParams.get('videoId');
 
+    // Fetch the video by its ID
+    $.ajax({
+        url: `https://ip-server-side.onrender.com/api/videos/videos/${videoId}`,
+        method: 'GET',
+        success: function(video) {
+            // Handle the retrieved video data
+            console.log('Video:', video);
+
+            // Update the video source
+            $('#customPlayer source').attr('src', video.Url);
+            $('#customPlayer')[0].load(); // Reload the video player
+        },
+        error: function(xhr, status, error) {
+            console.error('Error fetching video:', error);
+        }
+    });
+
+    // Call the function to fetch related videos
+    fetchRelatedVideos('your_genre_here'); // Replace 'your_genre_here' with the actual genre
+
+    // Function to fetch related videos based on the genre
+    function fetchRelatedVideos(genre) {
+        $.ajax({
+            url: 'https://ip-server-side.onrender.com/api/videos/videos',
+            method: 'GET',
+            data: { genre: genre },
+            success: function (relatedVideos) {
+                // Populate the related videos section
+                relatedVideos.forEach(function (video) {
+                    $('.related-videos').append(`<div class="video">${video.title}</div>`);
+                });
+            },
+            error: function (xhr, status, error) {
+                console.error('Error fetching related videos:', error);
+            }
+        });
+    }
+});
+
+</script>
 </html>

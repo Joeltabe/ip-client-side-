@@ -13,6 +13,46 @@
     <link rel="stylesheet" type="text/css" href="assets/css/style.css" />
     <link rel="stylesheet" href="assets/css/forms.css">
     <style>
+        body{
+
+            color: #fff;
+
+            background-color: #141414 !important;
+        }
+        .header-bottom{
+            background-color: wheat ;
+        }
+    .thumbnail-img {
+        width: 400px;
+        height: 274px;
+    }
+    .video-card {
+        border-radius: 10px;
+        overflow: hidden;
+        margin-right: 20px;
+        flex: 0 0 auto;
+        width: 200px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+    }
+    .details{
+        padding: 12px;
+        display: block;
+        color: wheat;
+    }
+    img{
+        border-radius: 10px;
+    }
+    .genre-link{
+        border-radius: 10px;
+    }
+    .genre-link img{
+        border-radius: 0;
+    }
+   
+                                
+    </style>
+   <style>
+        
         .video-card {
     position: relative;
     overflow: hidden;
@@ -159,32 +199,15 @@
                 <!-- Trending videos title -->
             </div>
             <div class="video-row row">
-                <!-- Loop through each video -->
+                <!-- Video cards will be dynamically added here -->
                 <div class="loader-wrapper">
                     <div class="loader"></div>
                 </div>
-                <% videos.forEach(function(video) { %>
-                <div class="col-lg-3 col-md-4 col-sm-6">
-                    <div class="video-card">
-                        <!-- Embed the video directly -->
-                        <video class="video-element" controls muted loop preload="metadata">
-                            <source src="${video.videoUrl}" type="video/mp4">
-                            Your browser does not support the video tag.
-                        </video>
-                        <div class="row details no-margin">
-                            <!-- Title of the video -->
-                            <h6>${video.title}</h6>
-                            <!-- Category of the video -->
-                            <p><strong>Category:</strong> ${video.category}</p>
-                            <!-- Reviews of the video -->
-                            <p><strong>Reviews:</strong> ${video.reviews}</p>
-                        </div>
-                    </div>
-                </div>
-                <% }) %>
+                <!-- Video cards will be dynamically added here -->
             </div>
         </div>
     </div>
+
 
     <!--####################### Quote Starts Here ###################-->
     <div class="footer-ablove">
@@ -263,6 +286,15 @@
     });
 </script>
 <script>
+    $(document).ready(function () {
+        $('.video-card video').hover(function () {
+            $(this).get(0).play();
+        }, function () {
+            $(this).get(0).pause();
+        });
+    });
+</script>
+<script>
    $(document).ready(function () {
     // Fetch data for all videos
     $.ajax({
@@ -272,27 +304,27 @@
             // Update videos content
             $('.video-row').empty(); // Clear existing content 
             
-            // Organize videos by categories
-            var videosByCategory = {};
+            // Organize videos by genres
+            var videosByGenre = {};
             data.forEach(function (video) {
-                if (!videosByCategory[video.category]) {
-                    videosByCategory[video.category] = [];
+                if (!videosByGenre[video.genre]) {
+                    videosByGenre[video.genre] = [];
                 }
-                videosByCategory[video.category].push(video);
+                videosByGenre[video.genre].push(video);
             });
 
-            // Loop through each category
-            Object.keys(videosByCategory).forEach(function (category) {
-                // Create HTML for category heading
-                var categoryHtml = `
+            // Loop through each genre
+            Object.keys(videosByGenre).forEach(function (genre) {
+                // Create HTML for genre heading
+                var genreHtml = `
                     <div class="col-12">
-                        <h3>${category}</h3>
+                        <h3>${genre}</h3>
                     </div>
                 `;
-                $('.video-row').append(categoryHtml);
+                $('.video-row').append(genreHtml);
 
-                // Loop through videos in the category
-                videosByCategory[category].forEach(function (video) {
+                // Loop through videos in the genre
+                videosByGenre[genre].forEach(function (video) {
                     // Create HTML for each video card
                     var cardHtml = `
                         <div class="col-lg-3 col-md-4 col-sm-6">
@@ -306,7 +338,7 @@
                                     <!-- Title of the video -->
                                     <h6>${video.title}</h6>
                                     <!-- Category of the video -->
-                                    <p><strong>Category:</strong> ${video.category}</p>
+                                    <p><strong>Genre:</strong> ${video.genre}</p>
                                     <!-- Reviews of the video -->
                                     <p><strong>Reviews:</strong> ${video.reviews}</p>
                                 </div>

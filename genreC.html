@@ -8,40 +8,130 @@
     <!-- Include SweetAlert CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <style>
-        /* Style for progress bar */
+        *, ::after, ::before {
+  box-sizing: border-box;
+}
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #141414;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .container {
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+  background-color: #1f1f1f;
+}
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+    input[type="text"],
+    input[type="number"],
+    input[type="file"],
+    select,
+    textarea {
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+        border: none;
+        border-radius: 5px;
+        background-color: #333;
+        color: #fff;
+    }
+    input[type="file"] {
+        cursor: pointer;
+    }
+
+    select {
+        background-color: #333;
+        color: #fff;
+    }
+
+    .form-group,
+    .form-group select,
+    .form-group textarea {
+        transition: all 0.3s;
+    }
+
+    .form-group:hover,
+    .form-group:hover select,
+    .form-group:hover textarea {
+        color: #3498db;
+    }
+
         #progress {
             width: 100%;
             height: 10px;
-            background-color: #f3f3f3;
-            margin-bottom: 10px;
+            background-color: #1f1f1f;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            overflow: hidden;
         }
 
         #progress-bar {
             width: 0;
             height: 100%;
             background-color: #4caf50;
+            transition: width 0.3s ease;
+        }
+
+        button[type="submit"] {
+            padding: 10px;
+            background-color: #4caf50;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #45a049;
         }
     </style>
 </head>
 
 <body>
-    <h2>Create Genre</h2>
-    <form id="createGenreForm" enctype="multipart/form-data">
-        <label for="name">Genre Name:</label><br>
-        <input type="text" id="name" name="name" required><br>
-        <label for="thumbnail">Thumbnail Image:</label><br>
-        <input type="file" id="thumbnail" name="thumbnail" accept="image/*" required><br><br>
-        <!-- Progress bar -->
-        <div id="progress">
-            <div id="progress-bar"></div>
-        </div>
-        <button type="submit">Submit</button>
-    </form>
+    <div class="container">
+        <h2>Create Genre</h2>
+        <form  id="createGenreForm" enctype="multipart/form-data">
+            <label class="form-group" for="name">Genre Name:</label>
+            <input type="text" id="name" name="name" required>
+            <label class="form-group" for="thumbnail">Thumbnail Image:</label>
+            <input type="file" id="thumbnail" name="thumbnail" accept="image/*" required>
+            <!-- Progress bar -->
+            <div id="progress">
+                <div id="progress-bar"></div>
+            </div>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
 
     <!-- Include SweetAlert JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
     <script>
-        document.getElementById('createGenreForm').addEventListener('submit', async function (event) {
+        document.getElementById('createGenreForm').addEventListener('submit', async function(event) {
             event.preventDefault();
 
             const form = event.target;
@@ -61,7 +151,7 @@
                     method: 'POST',
                     body: formData,
                     // Report progress for the progress bar
-                    onUploadProgress: function (progressEvent) {
+                    onUploadProgress: function(progressEvent) {
                         const progress = Math.round((progressEvent.loaded / progressEvent.total) * 100);
                         document.getElementById('progress-bar').style.width = progress + '%';
                     }

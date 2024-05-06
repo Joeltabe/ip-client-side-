@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Media Player</title>
+    <link rel="stylesheet" href="https://cdn.plyr.io/3.6.8/plyr.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.3/tiny-slider.css">
+    <link rel="shortcut icon" href="assets/images/fav.jpg">
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/fontawsom-all.min.css">
+    <link rel="stylesheet" href="assets/css/animate.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/style.css"/>
+    
+ <style>
+            body{
+
+                color: #fff;
+
+                background-color: #141414 !important;
+            }
+            .header-bottom{
+                background-color: wheat ;
+            }
+        .thumbnail-img {
+            width: 400px;
+            height: 274px;
+        }
+        .video-card {
+            border-radius: 10px;
+            overflow: hidden;
+            margin-right: 20px;
+            flex: 0 0 auto;
+            width: 200px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+        }
+        .details{
+            padding: 12px;
+            display: block;
+            color: wheat;
+        }
+        img{
+            border-radius: 10px;
+        }
+        .genre-link{
+            border-radius: 10px;
+        }
+        .genre-link img{
+            border-radius: 0;
+        }
+       
+                                    
+        </style>
+        
+   <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #141414;
+            color: #fff;
+        }
+        .thumbnail-img {
+            width: 100%;
+            height: 219px;
+        }
+        
+        .container1 {
+            margin-top: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .video-container {
+            position: relative;
+            max-width: 100%;
+            margin-bottom: 30px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+        }
+
+        video {
+            width: 100%;
+            display: block;
+            border-radius: 10px;
+        }
+
+        .controls {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .video-container:hover .controls {
+            opacity: 1;
+        }
+
+        .controls button {
+            background-color: transparent;
+            border: none;
+            color: #fff;
+            padding: 5px 10px;
+            margin: 0 5px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .controls button:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .loader {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50px;
+            height: 50px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            animation: spin 2s linear infinite;
+            display: none;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Styling for video details */
+        .video-details {
+            background-color: #1f1f1f;
+            text-decoration: none;
+            padding: 20px;
+            
+            margin-bottom: 30px;
+        }
+
+        .video-details h2 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #fff;
+        }
+
+        .video-details h3 {
+            font-weight: bold;
+            margin-top: 0;
+            color: #fff;
+        }
+
+        .video-details p {
+            margin: 5px 0;
+            color: #fff;
+            text-decoration: none;
+        }
+        .video-details a {
+            margin: 5px 0;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        /* Styling for similar videos section */
+        .similar-videos {
+            background-color: #1f1f1f;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+        }
+
+        .similar-videos h2 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #fff;
+        }
+
+        .video-list {
+            display: flex;
+            overflow-x: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            margin-bottom: -20px;
+            padding-bottom: 20px;
+        }
+
+        .video-list::-webkit-scrollbar {
+            display: none;
+        }
+
+        .video-card {
+            border-radius: 10px;
+            overflow: hidden;
+            margin-right: 20px;
+            flex: 0 0 auto;
+            width: 200px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+        }
+
+        .video-card video {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        .video-card .video-details {
+            padding: 10px;
+        }
+
+        .video-card .video-details h3 {
+            font-weight: bold;
+            margin-top: 0;
+            color: #fff;
+        }
+
+        .video-card .video-details p {
+            margin: 5px 0;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <header class="continer-fluid ">
+        <div class="header-top">
+            <div class="container">
+                <div class="row col-det">
+                    <div class="col-lg-6 d-none d-lg-block">
+                        <ul class="ulleft">
+                            <li>
+                                <i class="far fa-envelope"></i>
+                                ip23movies@gmail.com
+                                <span>|</span></li>
+                            <li>
+                                <i class="far fa-clock"></i>
+                                Service Time : 12:AM</li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-6 col-md-12">
+                        <ul class="ulright">
+                            <li>
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                Upload Video
+                                <span>|</span></li>
+                            <li>
+                                <i class="fas fa-user"></i>
+                                Login</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="header-bottom">
+            <div class="container">
+                <div class="row nav-row">
+                    <div class="col-md-3 logo">
+                        <img src="assets/images/Add_a_heading-removebg-preview.png" alt="">
+                    </div>
+                    <div class="col-md-9 nav-col">
+                        <nav class="navbar navbar-expand-lg navbar-light">
+
+                            <button
+                                class="navbar-toggler"
+                                type="button"
+                                data-toggle="collapse"
+                                data-target="#navbarNav"
+                                aria-controls="navbarNav"
+                                aria-expanded="false"
+                                aria-label="Toggle navigation">
+                                <span class="navbar-toggler-icon"></span>
+                            </button>
+                            <div class="collapse navbar-collapse" id="navbarNav">
+                                <ul class="navbar-nav">
+                                    <li class="nav-item active">
+                                        <a class="nav-link" href="index.html">Home
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="about_us.html">About Us</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="category.html">Category</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="videos.html">Videos</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="blog.html">Blog</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="contact_us.html">Contact US</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+<div class="container1">
+    <div class="video-container">
+        <video id="player" crossorigin playsinline controls>
+            <!-- Video source will be dynamically loaded here -->
+        </video>
+        <div class="controls">
+            <button class="playpause-button">Play/Pause</button>
+            <input type="range" class="seek-slider" value="0">
+            <button class="fullscreen-button">Fullscreen</button>
+            <button class="quality-button">Quality</button>
+            <button class="cc-button">CC</button>
+        </div>
+        <div class="loader"></div>
+    </div>
+   
+    <div class="video-details" id="video-details">
+        <h2>Video Details</h2>
+        <!-- Video details will be dynamically loaded here -->
+
+    </div>
+
+    <div class="similar-videos" id="similar-videos">
+        <h2>Similar Videos</h2>
+        <!-- Similar videos carousel will be dynamically loaded here -->
+    </div>
+</div>
+ <!--####################### Quote Starts Here ###################-->
+ <div class="footer-ablove">
+    <div class="container">
+        <div class="row">
+            <p>Are you looking for a consultant for your Business
+                <button class="btn btn-default">Get Quote</button>
+            </p>
+        </div>
+    </div>
+</div>
+
+<footer class="footer"> <div class="container"> <div class="row"> <div class="col-md-3 about col-sm-12"> <h2><i class="fas fa-info-circle"></i> About Us</h2> <p> This streaming app, developed by Tabe Joel, is a leading provider of information technology, consulting, and business process services in Cameroon. Our dedicated employees offer strategic insights, technological expertise, and industry experience. </p>
+    angelscript
+    
+            </div>
+            <div class="col-md-3 col-sm-12">
+                <h2><i class="fas fa-link"></i> Useful Links</h2>
+                <ul class="list-unstyled link-list">
+                    <li><a ui-sref="about" href="#/about">About us</a><i class="fa fa-angle-right"></i></li>
+                    <li><a ui-sref="portfolio" href="#/portfolio">Portfolio</a><i class="fa fa-angle-right"></i></li>
+                    <li><a ui-sref="products" href="#/products">Latest jobs</a><i class="fa fa-angle-right"></i></li>
+                    <li><a ui-sref="gallery" href="#/gallery">Gallery</a><i class="fa fa-angle-right"></i></li>
+                    <li><a ui-sref="contact" href="#/contact">Contact us</a><i class="fa fa-angle-right"></i></li>
+                </ul>
+            </div>
+            <div class="col-md-3 col-sm-12">
+                <h2><i class="fas fa-life-ring"></i> Get Support</h2>
+                <ul class="list-unstyled link-list">
+                    <li><a ui-sref="about" href="#/about">About us</a><i class="fa fa-angle-right"></i></li>
+                    <li><a ui-sref="portfolio" href="#/portfolio">Portfolio</a><i class="fa fa-angle-right"></i></li>
+                    <li><a ui-sref="products" href="#/products">Latest jobs</a><i class="fa fa-angle-right"></i></li>
+                    <li><a ui-sref="gallery" href="#/gallery">Gallery</a><i class="fa fa-angle-right"></i></li>
+                    <li><a ui-sref="contact" href="#/contact">Contact us</a><i class="fa fa-angle-right"></i></li>
+                </ul>
+            </div>
+            <div class="col-md-3 col-sm-12 map-img">
+                <h2><i class="fas fa-map-marker-alt"></i> Contact Us</h2>
+                <address class="md-margin-bottom-40">
+                    Buea, Cameroon <br> Phone: +237 650665871 <br> Email: <a href="mailto:info@gmai.com"
+                        class="">info@camstream.com</a><br> github:  <a href="https://github.com/Joeltabe/" class="">www.ip23.com</a>
+                </address>
+    
+            </div>
+        </div>
+    </div>
+    
+    </footer>
+<div class="copy">
+    <div class="container">
+        <a href="https://www.smarteyeapps.com/">2024 &copy; All Rights Reserved </a>
+
+        <span>
+            <a href=""><i class="fab fa-github"></i></a>
+            <a href="https://www.linkedin.com/groups/10411920/"><i class="fab fa-linkedin-in"></i></a>
+            <a href="https://in.pinterest.com/prabnr/pins/"><i class="fab fa-pinterest-p"></i></a>
+            <a href="https://twitter.com/prabinraja89"><i class="fab fa-twitter"></i></a>
+            <a href="https://www.facebook.com/freewebtemplatesbysmarteye"><i class="fab fa-facebook-f"></i></a>
+        </span>
+    </div>
+
+</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+<script src="https://cdn.plyr.io/3.6.8/plyr.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.3/min/tiny-slider.js"></script>
+<script src="script.js"></script>
+<script src="assets/js/jquery-3.2.1.min.js"></script>
+<script src="assets/js/popper.min.js"></script>
+<script src="assets/js/bootstrap.min.js"></script>
+<script src="assets/plugins/scroll-fixed/jquery-scrolltofixed-min.js"></script>
+<script src="assets/js/script.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const player = new Plyr('#player');
+
+        const loader = document.querySelector('.loader');
+        const videoDetails = document.getElementById('video-details');
+        const similarVideos = document.getElementById('similar-videos');
+
+        // Show loader while fetching video
+        loader.style.display = 'block';
+
+        // Get the videoId from the URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const videoId = urlParams.get('videoId');
+
+        // Fetch video details and similar videos
+        Promise.all([
+            fetchVideoDetails(videoId),
+            fetchSimilarVideos(videoId)
+        ]).then(([videoDetailsData, similarVideosData]) => {
+            // Hide loader once fetched
+            loader.style.display = 'none';
+
+            // Display video details
+            displayVideoDetails(videoDetailsData);
+
+            // Initialize player with video source
+            initializePlayer(videoDetailsData.videoUrl);
+
+            // Display similar videos carousel
+            displaySimilarVideos(similarVideosData);
+        }).catch(error => {
+            console.error('Error fetching data:', error);
+            loader.style.display = 'none'; // Hide loader on error
+        });
+// Store watch length in local storage when video is paused
+player.on('pause', event => {
+            const currentTime = player.currentTime;
+            localStorage.setItem(`watchLength_${videoId}`, currentTime);
+        });
+
+        // Retrieve watch length from local storage and resume playback from where the user left off
+        const storedWatchLength = localStorage.getItem(`watchLength_${videoId}`);
+        if (storedWatchLength !== null) {
+            player.currentTime = parseFloat(storedWatchLength);
+        }
+
+        function fetchVideoDetails(videoId) {
+            return fetch(`https://ip-server-side.onrender.com/api/videos/videos/${videoId}`)
+                .then(response => response.json());
+        }
+
+        function fetchSimilarVideos(videoId) {
+            return fetch(`https://ip-server-side.onrender.com/api/videos/latest`)
+                .then(response => response.json())
+                .then(data => data.filter(video => video.id !== videoId));
+        }
+
+        function displayVideoDetails(data) {
+            videoDetails.innerHTML = `
+                <h2>${data.title}</h2>
+                <p><strong>Genre:</strong> ${data.genre}</p>
+                <p><strong>Reviews:</strong> ${data.reviews}</p>
+            `;
+        }
+
+        function initializePlayer(videoUrl) {
+            player.source = {
+                type: 'video',
+                sources: [
+                    {
+                        src: videoUrl,
+                        type: 'video/mp4'
+                    }
+                ]
+            };
+            player.play();
+        }
+
+        function displaySimilarVideos(data) {
+    const carousel = document.createElement('div');
+    carousel.classList.add('video-list');
+    
+    // Take only the first 5 videos
+    const firstFiveVideos = data.slice(0, 5);
+
+    // Loop through each video
+    firstFiveVideos.forEach(function (video) {
+        // Fetch the thumbnail for the current video
+        fetch(`https://ip-server-side.onrender.com/api/thumbnail?videoId=${video._id}`)
+            .then(response => response.json())
+            .then(thumbnails => {
+                // Assuming only one thumbnail is associated with the video
+                const thumbnailUrl = thumbnails.length > 0 ? thumbnails[0].thumbnail : 'placeholder.jpg';
+
+                const videoCard = document.createElement('div');
+                videoCard.classList.add('video-card');
+                const duration = secondsToHoursAndMinutes(video.duration);
+                videoCard.innerHTML = `
+                <a href="solo.html?videoId=${video._id}&videoName=${encodeURIComponent(video.title)}">
+                <img src="${thumbnailUrl}" alt="" class="thumbnail-img">
+                    <div class="video-details">
+                        <h3>${video.title}</h3>
+                        <p><strong>Title:</strong> ${video.title}</p>
+                        <p><strong>Genre:</strong> ${video.genre}</p>
+                        <p><strong>Duration:</strong> ${duration}</p>
+                        <div class="reviews">                    
+                        <p><strong>Reviews:</strong> ${generateStarRating(video.reviews)}</p>
+                    </div>
+                </a>
+                `;
+
+                // Append the video card to the carousel
+                carousel.appendChild(videoCard);
+            })
+            .catch(error => {
+                console.error('Error fetching thumbnails:', error);
+            });
+    });
+
+    similarVideos.appendChild(carousel);
+
+    // Initialize tiny-slider carousel
+    const slider = tns({
+        container: carousel,
+        items: 3,
+        slideBy: 'page',
+        autoplay: false,
+        mouseDrag: true,
+        controls: true,
+        nav: false,
+        gutter: 20,
+        responsive: {
+            768: {
+                items: 4
+            },
+            992: {
+                items: 5
+            }
+        }
+    });
+}
+function generateStarRating(reviews) {
+            const rating = parseFloat(reviews);
+            const fullStars = Math.floor(rating);
+            const halfStar = rating % 1 !== 0;
+            const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
+
+            let starsHTML = '';
+            for (let i = 0; i < fullStars; i++) {
+                starsHTML += '<i class="fas fa-star"></i>';
+            }
+            if (halfStar) {
+                starsHTML += '<i class="fas fa-star-half-alt"></i>';
+            }
+            for (let i = 0; i < emptyStars; i++) {
+                starsHTML += '<i class="far fa-star"></i>';
+            }
+            return starsHTML;
+        }
+        function secondsToHoursAndMinutes(seconds) {
+            const hours = Math.floor(seconds / 3600);
+            const minutes = Math.floor((seconds % 3600) / 60);
+            return `${hours}hr ${minutes}m`;
+        }
+    });
+</script>
+<script>
+    
+</script>
+
+</body>
+</html>

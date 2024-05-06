@@ -5,15 +5,25 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Create Video Form</title>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 <style>
+    body {
+        background-color: #141414;
+        color: #fff;
+    }
+
     .container {
-        max-width: 600px;
+        max-width: 800px;
         margin: 0 auto;
         padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+        background-color: #1f1f1f;
     }
 
     h2 {
         text-align: center;
+        margin-bottom: 30px;
     }
 
     .form-group {
@@ -27,15 +37,165 @@
 
     input[type="text"],
     input[type="number"],
-    textarea,
-    select {
+    input[type="file"],
+    select,
+    textarea {
         width: 100%;
         padding: 10px;
         font-size: 16px;
+        border: none;
+        border-radius: 5px;
+        background-color: #333;
+        color: #fff;
     }
+
+    input[type="file"] {
+        cursor: pointer;
+    }
+
+    select {
+        background-color: #333;
+        color: #fff;
+    }
+
+    .form-group label,
+    .form-group select,
+    .form-group textarea {
+        transition: all 0.3s;
+    }
+
+    .form-group:hover label,
+    .form-group:hover select,
+    .form-group:hover textarea {
+        color: #3498db;
+    }
+
+    #thumbnail-preview {
+        max-width: 100%;
+        height: auto;
+        margin-bottom: 20px;
+    }
+
+    #thumbnail-preview img {
+        max-width: 100%;
+        height: auto;
+    }
+
+    .btn-primary {
+        background-color: #3498db;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 20px;
+        font-size: 18px;
+        cursor: pointer;
+    }
+
+    .btn-primary:hover {
+        background-color: #2980b9;
+    }
+
+    .spinner-border {
+        color: #3498db;
+    }
+
+    .progress {
+        height: 20px;
+        border-radius: 5px;
+        overflow: hidden;
+        background-color: #333;
+    }
+
+    .progress-bar {
+        background-color: #3498db;
+    }
+
+    .invalid-feedback {
+        color: #e74c3c;
+        margin-top: 5px;
+        font-size: 14px;
+    }
+
+    .genre-list {
+        list-style: none;
+        padding: 0;
+        margin-bottom: 20px;
+    }
+    .form-check {
+  position: relative;
+  display: block;
+  padding-left: 3.3rem;
+}
+    .genre-list li {
+        display: inline-block;
+        margin-right: 10px;
+        background-color: #3498db;
+        color: #fff;
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-size: 14px;
+    }
+
+    .genre-list li:hover {
+        background-color: #2980b9;
+    }
+
+    .genre-list li i {
+        margin-right: 5px;
+    }
+
+ /* Style for the offline header */
+   
+ .offline-header {
+  width: 100%;
+  background-color: red;
+  color: white;
+  text-align: center;
+  padding: 10px 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  display: none; /* Initially hidden */
+  animation: slideDown 0.5s ease-out forwards; /* Animation */
+  
+}
+
+
+@keyframes slideDown {
+  0% { top: -50px; opacity: 0; }
+  100% { top: 0; opacity: 1; }
+}
+.form-group-genres {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .genre-checkbox {
+        margin-right: 10px;
+        
+    }
+    .form-group-genres {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .genre-checkbox {
+        margin-right: 10px;
+    }
+@media (max-width: 768px) {
+  .offline-header {
+    padding: 15px 0;
+    font-size: 14px;
+  }
+}
 </style>
 </head>
 <body>
+  
+   <div class="offline-header" id="offline-header">
+    You are currently offline. Please check your internet connection.
+  </div>
+
 <div class="container">
   <h2>Create Video</h2>
   <form id="video-form">
@@ -43,10 +203,6 @@
       <label for="title">Title:</label>
       <input type="text" id="title" name="title" required>
     </div>
-    <!-- <div class="form-group">
-      <label for="description">Description:</label>
-      <textarea id="description" name="description" required></textarea>
-    </div> -->
     <div class="form-group">
       <label for="file">Video File:</label>
       <input type="file" id="file" name="video" accept="video/*" required>
@@ -60,19 +216,23 @@
       <input type="text" id="category" name="category" required>
     </div>
     <div class="form-group">
-      <label for="genre">Genre:</label>
-      <select id="genre" name="genre" required>
+      <label for="genre">Genres:</label>
+      <div class="form-group-genres">
         <!-- Dropdown options will be dynamically inserted here -->
-      </select>
+      </div>
     </div>
-    
     <div class="form-group">
       <label for="description">Description:</label>
-      <input type="text" id="description" name="description" required>
+      <textarea id="description" name="description" required></textarea>
     </div>
     <div class="form-group">
       <label for="thumbnail">Thumbnail Image:</label>
       <input type="text" id="thumbnail" name="thumbnail" required>
+      <div id="thumbnail-preview"></div>
+    </div>
+    <div class="form-group">
+      <label for="releaseYear">Release Year:</label>
+      <input type="number" id="releaseYear" name="releaseYear" min="1900" max="2099" step="1" value="2022" required>
     </div>
     <div class="form-group">
       <label for="rating">Rating:</label>
@@ -98,7 +258,7 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
-  // Fetch genres when the page is loaded
+    // Fetch genres when the page is loaded
 fetchGenres();
 
 // Function to fetch genres
@@ -108,10 +268,15 @@ function fetchGenres() {
         type: 'GET',
         success: function (data) {
             // Clear previous dropdown options
-            $('#genre').empty();
+            $('.form-group-genres').empty();
             // Loop through fetched genres and append them to the dropdown
             data.forEach(function (genre) {
-                $('#genre').append(`<option value="${genre.name}">${genre.name}</option>`);
+                $('.form-group-genres').append(`
+                  <div class="form-check">
+                    <input type="checkbox" class="form-check-input genre-checkbox" id="genre-${genre.id}" name="genres[]" value="${genre.id}">
+                    <label class="form-check-label" for="genre-${genre.id}">${genre.name}</label>
+                  </div>
+                `);
             });
         },
         error: function (xhr, status, error) {
@@ -119,60 +284,79 @@ function fetchGenres() {
         }
     });
 }
+  // Function to show the offline header
+  function showOfflineHeader() {
+      $('#offline-header').show();
+    }
 
-    // Function to handle form submission
-    document.getElementById('video-form').addEventListener('submit', async function(event) {
-      event.preventDefault();
-  
-      // Get form data
-      const formData = new FormData(this);
-  
-      // Get submit button and spinner
-      const submitBtn = document.getElementById('submit-btn');
-      const spinner = document.getElementById('spinner');
-      const progressBar = document.getElementById('progress-bar');
-  
-      try {
-        // Show spinner and progress bar
-        spinner.classList.remove('d-none');
-        progressBar.classList.remove('d-none');
-  
-        // Create XHR object
-        const xhr = new XMLHttpRequest();
-  
-        // Set upload progress listener
-        xhr.upload.addEventListener('progress', function(event) {
-          if (event.lengthComputable) {
-            const percentComplete = (event.loaded / event.total) * 100;
-            progressBar.querySelector('.progress-bar').style.width = percentComplete + '%';
-          }
-        });
-  
-        // Set request completed listener
-        xhr.addEventListener('load', function() {
-          // Hide spinner and progress bar
-          spinner.classList.add('d-none');
-          progressBar.classList.add('d-none');
-  
-          if (xhr.status === 201) {
-            alert('Video created successfully!');
-            // Optionally, clear the form or redirect the user
-            document.getElementById('video-form').reset(); // Reset the form
-          } else {
-            alert('Error creating video. Please try again.');
-          }
-        });
-  console.log(formData)
-        // Open and send XHR request
-        xhr.open('POST', 'https://ip-server-side.onrender.com/api/videos/upload');
-        xhr.setRequestHeader('mode', 'cors');
-        xhr.send(formData);
-      } catch (error) {
-        // Handle errors
-        alert('Error creating video: ' + error.message);
-      }
+    // Function to hide the offline header
+    function hideOfflineHeader() {
+      $('#offline-header').fadeOut();
+    }
+
+    // Check if the browser is online when the page loads
+    if (!navigator.onLine) {
+      showOfflineHeader();
+    }
+
+    // Listen for online and offline events
+    window.addEventListener('online', function() {
+      hideOfflineHeader();
+      // Show "Connected" message (optional)
     });
-  </script>
-  
+
+    window.addEventListener('offline', function() {
+      showOfflineHeader();
+    });
+
+  // Add genres functionality
+$(document).ready(function() {
+    let genres = [];
+
+    $('#genreInput').keypress(function(event) {
+        if (event.which === 13) {
+            event.preventDefault();
+            const genre = $(this).val().trim();
+            if (genre !== '' && !genres.includes(genre)) {
+                genres.push(genre);
+                updateGenreList();
+                $(this).val('');
+            }
+        }
+    });
+
+    function updateGenreList() {
+        $('#genreList').empty();
+        genres.forEach(function(genre) {
+            $('#genreList').append(`<li>${genre}<i class="fas fa-times" data-genre="${genre}"></i></li>`);
+        });
+        $('#genres').val(JSON.stringify(genres));
+    }
+
+    $('#genreList').on('click', 'li i', function() {
+        const genreToRemove = $(this).data('genre');
+        genres = genres.filter(function(genre) {
+            return genre !== genreToRemove;
+        });
+        updateGenreList();
+    });
+});
+
+// Preview Thumbnail Image
+$('#thumbnail').on('input', function() {
+    const thumbnailUrl = $(this).val().trim();
+    if (thumbnailUrl !== '') {
+        $('#thumbnail-preview').html(`<img src="${thumbnailUrl}" alt="Thumbnail Preview">`);
+    } else {
+        $('#thumbnail-preview').html('');
+    }
+});
+
+// Form submission
+$('#video-form').submit(function(event) {
+    event.preventDefault();
+    // Your form submission logic here
+});
+</script>
 </body>
 </html>
