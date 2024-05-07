@@ -596,10 +596,10 @@ margin-left: auto;
     <script src="assets/js/script.js"></script>
     
     <script>
-       $(document).ready(function () {
+      $(document).ready(function () {
     // Fetch the first 5 latest videos
     $.ajax({
-        url: 'https://ip-server-side.onrender.com/api/videos/latest', // Replace with the actual API endpoint for fetching latest videos
+        url: 'https://ip-server-side.onrender.com/api/videos/latest',
         method: 'GET',
         success: function (videos) {
             // Take only the first 5 videos
@@ -610,57 +610,45 @@ margin-left: auto;
 
             // Loop through each video
             firstFiveVideos.forEach(function (video) {
-                // Fetch the thumbnail for the current video
-                $.ajax({
-                    url: 'https://ip-server-side.onrender.com/api/thumbnail', // Replace with the actual API endpoint for fetching thumbnails
-                    method: 'GET',
-                    data: { videoId: video._id }, // Pass the video ID to fetch its thumbnail
-                    success: function (thumbnails) {
-                        // Assuming only one thumbnail is associated with the video
-                        if (thumbnails.length > 0) {
-                            var thumbnailUrl = thumbnails[0].thumbnail;
-                            const duration = secondsToHoursAndMinutes(video.duration);
-                            // Create HTML for each video detail
-                            var videoHtml = `
-                                <div class="col-lg-3 col-md-4 col-sm-6">
-                                    <a href="solo.html?videoId=${video._id}&videoName=${encodeURIComponent(video.title)}">
-                                        <div class="video-card">
-                                            <img src="${thumbnailUrl}" alt="" class="thumbnail-img">
-                                            <div class="row details no-margin">
-                                                <h5><strong>${video.title}</strong></h5>
-                                                <div class="col-md-12 col-12 no-padding left">
-                                                    <div class="duration">
-                                                        <i class="fa fa-film"></i>
-                                                         <strong>Genre:</strong><span> ${video.genre}</span>
-                                                    </div>
-                                                
-                                                </div>
-                                                <div class="col-md-12 col-12 no-padding left">
-                                                    <div class="duration">
-                                                        <i class="far fa-clock"></i>
-                                                        <strong>Duration:</strong><span>${duration}</span>
-                                                    </div>
-                                                    
-                                                </div>
-                                                <div class="col-md-12 col-12 no-padding left">            
-                                                    <div class="reviews">
-                                                        <i class="far fa-comments"></i>
-                                                        <strong>Reviews:</strong> ${generateStarRating(video.reviews)}
-                                                    </div>
-                                                </div>
-                                            </div>
+                // Construct thumbnail URL based on movie title
+                const thumbnailUrl = `https://ip-server-side.onrender.com/api/thumbnails/${encodeURIComponent(video.title)}`;
+                
+                const duration = secondsToHoursAndMinutes(video.duration);
+                // Create HTML for each video detail
+                var videoHtml = `
+                    <div class="col-lg-3 col-md-4 col-sm-6">
+                        <a href="solo.html?videoId=${video._id}&videoName=${encodeURIComponent(video.title)}">
+                            <div class="video-card">
+                                <img src="${thumbnailUrl}" alt="" class="thumbnail-img">
+                                <div class="row details no-margin">
+                                    <h5><strong>${video.title}</strong></h5>
+                                    <div class="col-md-12 col-12 no-padding left">
+                                        <div class="duration">
+                                            <i class="fa fa-film"></i>
+                                             <strong>Genre:</strong><span> ${video.genre}</span>
                                         </div>
-                                    </a>
+                                    
+                                    </div>
+                                    <div class="col-md-12 col-12 no-padding left">
+                                        <div class="duration">
+                                            <i class="far fa-clock"></i>
+                                            <strong>Duration:</strong><span>${duration}</span>
+                                        </div>
+                                        
+                                    </div>
+                                    <div class="col-md-12 col-12 no-padding left">            
+                                        <div class="reviews">
+                                            <i class="far fa-comments"></i>
+                                            <strong>Reviews:</strong> ${generateStarRating(video.reviews)}
+                                        </div>
+                                    </div>
                                 </div>
-                            `;
-                            // Append the video HTML to the latest video row
-                            $('.videos-row').append(videoHtml);
-                        }
-                    },
-                    error: function (xhr, status, error) {
-                        console.error('Error fetching thumbnails:', error);
-                    }
-                });
+                            </div>
+                        </a>
+                    </div>
+                `;
+                // Append the video HTML to the latest video row
+                $('.videos-row').append(videoHtml);
             });
         },
         error: function (xhr, status, error) {
@@ -670,6 +658,7 @@ margin-left: auto;
         }
     });
 });
+
 function generateStarRating(reviews) {
             const rating = parseFloat(reviews);
             const fullStars = Math.floor(rating);
